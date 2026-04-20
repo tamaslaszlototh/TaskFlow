@@ -15,11 +15,5 @@
 /dataSources/
 /dataSources.local.xml
 # Backend ignored files
-/src/backend/TaskFlow.Api/bin
-/src/backend/TaskFlow.Api/obj
-/src/backend/TaskFlow.Infrastructure/bin
-/src/backend/TaskFlow.Infrastructure/obj
-/src/backend/TaskFlow.Application/bin
-/src/backend/TaskFlow.Application/obj
-/src/backend/TaskFlow.Domain/bin
-/src/backend/TaskFlow.Domain/obj
+**/bin
+**/obj

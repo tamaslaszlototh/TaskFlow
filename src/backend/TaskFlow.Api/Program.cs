@@ -1,7 +1,15 @@
+using TaskFlow.Api;
+using TaskFlow.Application;
+using TaskFlow.Domain;
+using TaskFlow.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services
+    .AddApiLayerServices()
+    .AddInfrastructureLayerServices()
+    .AddApplicationLayerServices()
+    .AddDomainLayerServices();
 
 var app = builder.Build();
 
