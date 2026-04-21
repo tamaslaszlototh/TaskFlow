@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddApiLayerServices()
-    .AddInfrastructureLayerServices()
+    .AddInfrastructureLayerServices(builder.Configuration)
     .AddApplicationLayerServices()
     .AddDomainLayerServices();
 
