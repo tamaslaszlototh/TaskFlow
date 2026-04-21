@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Api.Contracts.Authentication;
 using TaskFlow.Application.Authentication.Login;
+using TaskFlow.Application.Authentication.RefreshToken;
 using TaskFlow.Application.Authentication.Register;
 
 namespace TaskFlow.Api.Controllers;
@@ -43,10 +44,13 @@ public class AuthenticationController : ApiController
     }
 
     [HttpPost]
+    [AllowAnonymous]
     [Route("api/v1/refresh")]
-    public Task<IActionResult> Refresh()
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
     {
-        throw new NotImplementedException();
-        //Todo: implement token refresh logic
+        var command = new RefreshTokenCommand(request.RefreshToken);
+        var result = await _mediator.Send(command);
+        return result.Match(
+            success => Ok(_mapper.Map<AuthenticationResponse>(success)), Problem);
     }
 }

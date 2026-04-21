@@ -39,6 +39,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginCo
 
         var roles = await _userManager.GetRolesAsync(user);
         var jwtToken = _jwtTokenGenerator.GenerateToken(user, roles);
-        return new LoginCommandResult(jwtToken);
+        var refreshToken = await _jwtTokenGenerator.GenerateRefreshTokenAsync(user);
+        return new LoginCommandResult(jwtToken, refreshToken, 30);
     }
 }

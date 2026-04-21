@@ -54,7 +54,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
 
         var roles = await _userManager.GetRolesAsync(user);
         var token = _jwtTokenGenerator.GenerateToken(user, roles);
+        var refreshToken = await _jwtTokenGenerator.GenerateRefreshTokenAsync(user);
 
-        return new RegisterCommandResult(token);
+        return new RegisterCommandResult(token, refreshToken, 30);
     }
 }

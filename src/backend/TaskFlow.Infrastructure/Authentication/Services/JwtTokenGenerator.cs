@@ -12,10 +12,13 @@ namespace TaskFlow.Infrastructure.Authentication.Services;
 public sealed class JwtTokenGenerator : IJwtTokenGenerator
 {
     private readonly JwtSettings _jwtSettings;
+    private readonly UserManager<User> _userManager;
+    private const string RefreshTokenPurpose = "RefreshToken";
 
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
+    public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings, UserManager<User> userManager)
     {
         _jwtSettings = jwtSettings.Value;
+        _userManager = userManager;
     }
 
     public string GenerateToken(User user, IList<string> roles)
@@ -46,5 +49,20 @@ public sealed class JwtTokenGenerator : IJwtTokenGenerator
             signingCredentials: signingCredentials);
 
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
+    public async Task<string> GenerateRefreshTokenAsync(User user)
+    {
+        var identityToken =
+            await _userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, RefreshTokenPurpose);
+
+        return $"{user.Id}.{identityToken}";
+    }
+
+    public async Task<bool> VerifyRefreshTokenAsync(User user, string token)
+    {
+        var actualToken = token.Split('.', 2)[1];
+        return await _userManager.VerifyUserTokenAsync(user, TokenOptions.DefaultProvider, RefreshTokenPurpose,
+            actualToken);
     }
 }
