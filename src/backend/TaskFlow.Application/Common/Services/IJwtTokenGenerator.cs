@@ -4,5 +4,5 @@ namespace TaskFlow.Application.Common.Services;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(User user);
+    string GenerateToken(User user, IList<string> roles);
 }

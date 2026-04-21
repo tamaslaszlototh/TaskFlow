@@ -32,8 +32,12 @@ public static class DependencyInjection
             {
                 options.Stores.SchemaVersion = IdentitySchemaVersions.Version2;
                 options.Stores.MaxLengthForKeys = 256;
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+                options.Lockout.AllowedForNewUsers = true;
             })
             .AddRoles<IdentityRole>()
+            .AddSignInManager()
             .AddEntityFrameworkStores<AppDbContext>();
 
         return services;
